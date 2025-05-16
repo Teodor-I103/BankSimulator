@@ -14,8 +14,26 @@ def Valid_Age():
             elif user_age <= 0:
                 print("Enter an integer above 0")
             else:
-                None
+                Login_Selection()
         except ValueError:
             print("Please enter an integer")
 
+def Login_Selection():
+    while True:
+        user_choice = int(input("1. Login\n2. Sign Up\n"))
+        if user_choice == 1:
+            Login()
+            break
+        elif user_choice == 2:
+            Sign_Up()
+            break
+        else:
+            print("please enter 1 or 2")
+
+def Login():
+    None
+    
+def Sign_Up():
+    None
+    
 Valid_Age()
