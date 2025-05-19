@@ -20,20 +20,34 @@ def Valid_Age():
 
 def Login_Selection():
     while True:
-        user_choice = int(input("1. Login\n2. Sign Up\n"))
+        user_choice = int(input("1. Login\n2. Sign Up\n3. Exit\n"))
         if user_choice == 1:
             Login()
-            break
         elif user_choice == 2:
             Sign_Up()
-            break
+        elif user_choice == 3:
+            print("Goodbye!")
+            quit()
         else:
-            print("please enter 1 or 2")
+            print("please enter 1, 2 or 3")
 
 def Login():
     None
     
 def Sign_Up():
-    None
+    while True:
+        username = input("Please enter a username: ").strip()
+        if username == "":
+            print("Please enter a valid username")
+        else:
+            break
+    while True:
+        user_password = input("Please enter a password: ")
+        if user_password == "":
+            print("please enter a valid password")
+        else:
+            Login_Selection()
+            break
+
     
 Valid_Age()
