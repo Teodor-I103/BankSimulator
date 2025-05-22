@@ -2,6 +2,7 @@ MAXIMUM_AGE = 18
 MINIMUM_AGE = 13
 USER_FILE = "users.txt"
 TRANSACTION_FILE = "transactions.txt"
+placeholder = "==================================="
 
 def Valid_Age():
     while True:
@@ -23,7 +24,7 @@ def Valid_Age():
 def Login_Selection():
     while True:
         try:
-            user_choice = int(input("1. Login\n2. Sign Up\n3. Exit\n"))
+            user_choice = int(input(f"{placeholder}\n1. Login\n2. Sign Up\n3. Exit\n{placeholder}\nEnter an option: "))
             if user_choice == 1:
                 Login()
             elif user_choice == 2:
@@ -36,7 +37,21 @@ def Login_Selection():
         except ValueError:
             print("Please enter a number")
 def Login():
-    None
+    users = Load_Users()
+    username = input("Enter your username: ").strip()
+    while username not in users:
+        print("Please enter a valid username")
+        username = input("Enter your username: ").strip()
+    password = input("Please enter your password: ")
+    while users[username]["password"] != password:
+        print("Incorrect password.")
+        password = input("Please enter your password: ")
+    print(f"{placeholder}\nWelcome {username}!")
+    print(f"Your current balance is: ${users[username]["balance"]}")
+    Banking_Menu(username, users)
+
+def Banking_Menu(username, users):
+
     
 def Load_Users():
     users = {}
@@ -52,7 +67,7 @@ def Load_Users():
 def save_users(users):
     with open(USER_FILE, "w") as f:
         for username, password in users.items():
-            f.write(f"{username},{password['password']},{password['balance']}\n")
+            f.write(f"{username},{password["password"]},{password["balance"]}\n")
 
 def Sign_Up():
     users = Load_Users()
