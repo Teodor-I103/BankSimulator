@@ -47,10 +47,27 @@ def Login():
         print("Incorrect password.")
         password = input("Please enter your password: ")
     print(f"{placeholder}\nWelcome {username}!")
-    print(f"Your current balance is: ${users[username]["balance"]}")
     Banking_Menu(username, users)
 
 def Banking_Menu(username, users):
+    print(f"Your current balance is: ${users[username]["balance"]}")
+    while True:
+        try:
+            banking_choice = int(input(f"1. Withdraw\n2. Deposit\n3. Display Transanctions\n4. Logout\n{placeholder}\nPlease enter a choice: "))
+            if banking_choice == 1:
+                Withdraw()
+            elif banking_choice == 2:
+                Deposit()
+            elif banking_choice == 3:
+                Transanction_History()
+            elif banking_choice == 4:
+                print("You have logged out of your account")
+                Login_Selection()
+            else:
+                print("Enter 1, 2, 3, or 4")
+        except ValueError:
+            print("Please enter a number")
+
 
     
 def Load_Users():
