@@ -95,9 +95,9 @@ def Banking_Menu(username, users):
             if banking_choice == 1:
                 Withdraw(username, users)
             elif banking_choice == 2:
-                Deposit()
+                Deposit(username, users)
             elif banking_choice == 3:
-                Transanction_History()
+                Transanction_History(username, users)
             elif banking_choice == 4:
                 print("You have logged out of your account")
                 Login_Selection()
@@ -105,6 +105,19 @@ def Banking_Menu(username, users):
                 print("Enter 1, 2, 3, or 4")
         except ValueError:
             print("Please enter a number")
+
+def Withdraw(username, users):
+    withdraw_amount = int(input("Please enter how much you would like to withdraw: $"))
+    if withdraw_amount > users[username]["balance"]:
+        print("Not enough balance available.")
+    else:
+        users[username]["balance"] -= withdraw_amount
+        print(f"withdrawal successful!\nYou have withdrawn ${withdraw_amount}\n{placeholder}")
+        Banking_Menu(username, users)
+def Deposit():
+    None
+def Transanction_History():
+    None
 
     
 Valid_Age()
