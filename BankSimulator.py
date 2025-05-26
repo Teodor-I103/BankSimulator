@@ -2,7 +2,7 @@ MAXIMUM_AGE = 18
 MINIMUM_AGE = 13
 USER_FILE = "users.txt"
 TRANSACTION_FILE = "transactions.txt"
-placeholder = "==================================="
+LINE = "==================================="
 
 def Valid_Age():
     while True:
@@ -24,7 +24,7 @@ def Valid_Age():
 def Login_Selection():
     while True:
         try:
-            user_choice = int(input(f"{placeholder}\n1. Login\n2. Sign Up\n3. Exit\n{placeholder}\nEnter an option: "))
+            user_choice = int(input(f"{LINE}\n1. Login\n2. Sign Up\n3. Exit\n{LINE}\nEnter an option: "))
             if user_choice == 1:
                 Login()
             elif user_choice == 2:
@@ -84,20 +84,20 @@ def Login():
     while users[username]["password"] != password:
         print("Incorrect password.")
         password = input("Please enter your password: ")
-    print(f"{placeholder}\nWelcome {username}!")
+    print(f"{LINE}\nWelcome {username}!")
     Banking_Menu(username, users)
 
 def Banking_Menu(username, users):
     print(f"Your current balance is: ${users[username]["balance"]}")
     while True:
         try:
-            banking_choice = int(input(f"1. Withdraw\n2. Deposit\n3. Display Transanctions\n4. Logout\n{placeholder}\nPlease enter a choice: "))
+            banking_choice = int(input(f"1. Withdraw\n2. Deposit\n3. Display Transanctions\n4. Logout\n{LINE}\nPlease enter a choice: "))
             if banking_choice == 1:
                 Withdraw(username, users)
             elif banking_choice == 2:
                 Deposit(username, users)
             elif banking_choice == 3:
-                Transanction_History(username, users)
+                Transanction_History()
             elif banking_choice == 4:
                 print("You have logged out of your account")
                 Login_Selection()
@@ -106,23 +106,36 @@ def Banking_Menu(username, users):
         except ValueError:
             print("Please enter a number")
 
+def Log_Transaction(username, message):
+    with open(TRANSACTION_FILE, "a") as f:
+        f.write(f"{username}: {message}\n")
+
 def Withdraw(username, users):
     withdraw_amount = int(input("Please enter how much you would like to withdraw: $"))
     if withdraw_amount > users[username]["balance"]:
         print("Not enough balance available.")
     else:
         users[username]["balance"] -= withdraw_amount
-        print(f"withdrawal successful!\nYou have withdrawn ${withdraw_amount}\n{placeholder}")
+        print(f"withdrawal successful!\nYou have withdrawn ${withdraw_amount}\n{LINE}")
+        save_users(users)
+        Log_Transaction(username, f"Withdrawed ${withdraw_amount}")
         Banking_Menu(username, users)
 
 def Deposit(username, users):
     deposit_amount = int(input("Please enter how much you would like to withdraw: $"))
-    users[username]["balance"] -= deposit_amount
-    print(f"withdrawal successful!\nYou have withdrawn ${deposit_amount}\n{placeholder}")
+    users[username]["balance"] += deposit_amount
+    print(f"withdrawal successful!\nYou have withdrawn ${deposit_amount}\n{LINE}")
+    save_users(users)
+    Log_Transaction(username, f"Deposited ${deposit_amount}")
     Banking_Menu(username, users)
-    
+
 def Transanction_History():
-    None
+    try:
+        with open(TRANSACTION_FILE, "r") as f:
+            for line in f:
+                print(line)
+    except FileNotFoundError:
+        print("No transactions found.")
 
     
 Valid_Age()
