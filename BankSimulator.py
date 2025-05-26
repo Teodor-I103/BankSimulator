@@ -114,8 +114,13 @@ def Withdraw(username, users):
         users[username]["balance"] -= withdraw_amount
         print(f"withdrawal successful!\nYou have withdrawn ${withdraw_amount}\n{placeholder}")
         Banking_Menu(username, users)
-def Deposit():
-    None
+
+def Deposit(username, users):
+    deposit_amount = int(input("Please enter how much you would like to withdraw: $"))
+    users[username]["balance"] -= deposit_amount
+    print(f"withdrawal successful!\nYou have withdrawn ${deposit_amount}\n{placeholder}")
+    Banking_Menu(username, users)
+    
 def Transanction_History():
     None
 
