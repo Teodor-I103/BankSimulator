@@ -64,7 +64,10 @@ def save_users(users):
 def Sign_Up():
     users = Load_Users()
     while True:
-        username = input("Please enter a username: ").strip()
+        username = input("Please enter a username, or 'exit' to return to menu: ").strip()
+        lowered_username = username.lower()
+        if lowered_username == "exit":
+            Login_Selection() #Returns the user to login or sign up menu
         if username == "":
             print("Please enter a valid username")
         elif username in users:
@@ -72,7 +75,10 @@ def Sign_Up():
         else:
             break
     while True:
-        user_password = getpass.getpass("Please enter a password: ")
+        user_password = getpass.getpass("Please enter a password, or 'exit' to return to menu: ")
+        lowered_password = user_password.lower()
+        if lowered_password == "exit":
+            Login_Selection() #Returns the user to login or sign up menu
         if len(user_password) < 6: #Check password length
             print("Password must be at least 6 characters long.")
         else:
@@ -86,12 +92,18 @@ def Sign_Up():
 #Handles logging in an existing user
 def Login():
     users = Load_Users()
-    username = input("Enter your username: ").strip()
+    username = input("Please enter a username, or 'exit' to return to menu: ").strip()
+    lowered_username = username.lower()
+    if lowered_username == "exit":
+        Login_Selection() #Returns the user to login or sign up menu
     while username not in users: #Check if username exists
         print("Please enter a valid username")
         username = input("Enter your username: ").strip()
     while True: #Check for password
-        password = getpass.getpass("Please enter your password: ")
+        user_password = getpass.getpass("Please enter a password, or 'exit' to return to menu: ")
+        lowered_password = user_password.lower()
+        if lowered_password == "exit":
+            Login_Selection() #Returns the user to login or sign up menu
         if password == "":
             print("You must enter a password")
         else:
