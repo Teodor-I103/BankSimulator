@@ -113,7 +113,7 @@ def Banking_Menu(username, users):
             elif banking_choice == 2:
                 Deposit(username, users)
             elif banking_choice == 3:
-                Transanction_History()
+                Transanction_History(username, users)
             elif banking_choice == 4:
                 print("You have logged out of your account")
                 Login_Selection()
@@ -141,7 +141,7 @@ def Withdraw(username, users):
                 print(f"Withdrawal successful!\nYou have withdrawn ${withdraw_amount}\n{LINE}")
                 save_users(users)
                 Log_Transaction(username, f"Withdrawed ${withdraw_amount}")
-                Banking_Menu(username, users)
+                Banking_Menu(username, users) #Returns the user to banking menu
 
 #Deposit money to user's balance
 def Deposit(username, users):
@@ -155,16 +155,18 @@ def Deposit(username, users):
     print(f"Deposit successful!\nYou have deposited ${deposit_amount}\n{LINE}")
     save_users(users)
     Log_Transaction(username, f"Deposited ${deposit_amount}")
-    Banking_Menu(username, users)
+    Banking_Menu(username, users) #Returns the user to banking menu
 
 #Show transaction history for all users (optionally could be filtered per user)
-def Transanction_History():
+def Transanction_History(username, users):
     try:
         with open(TRANSACTION_FILE, "r") as f:
             for line in f:
                 print(line)
     except FileNotFoundError:
         print("No transactions found.")
+    print(LINE)
+    Banking_Menu(username, users) #Returns the user to banking menu
 
 #Program starts here
 Valid_Age()
