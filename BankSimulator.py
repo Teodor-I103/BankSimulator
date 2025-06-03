@@ -73,8 +73,8 @@ def Sign_Up():
             break
     while True:
         user_password = getpass.getpass("Please enter a password: ")
-        if user_password == "":
-            print("Please enter a valid password")
+        if len(user_password) < 6: #Check password length
+            print("Password must be at least 6 characters long.")
         else:
             break
     #Save the new user with starting balance of $0.00
