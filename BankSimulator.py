@@ -50,10 +50,10 @@ def Valid_Age():
             user_age = int(input("Please enter your age: "))
             if user_age > MAXIMUM_AGE:
                 print("You are too old to create an account.\nGoodbye!")
-                break
+                quit()
             elif 0 < user_age < MINIMUM_AGE:
                 print("You are too young to create an account.\nGoodbye!")
-                break
+                quit()
             elif user_age <= 0:
                 print("Enter an integer above 0")
             else:
@@ -175,11 +175,12 @@ def Transanction_History(username, users):
     try:
         with open(TRANSACTION_FILE, "r") as f:
             for line in f:
-                print(line)
+                if line.startswith(f"{username}: "):
+                    print(line)
     except FileNotFoundError:
         print("No transactions found.")
     print(LINE)
     Banking_Menu(username, users) #Returns the user to banking menu
 
 #Program starts here
-Valid_Age()
+Login_Selection()
