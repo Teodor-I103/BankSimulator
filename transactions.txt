@@ -2,3 +2,5 @@ t: Deposited $500
 t: Withdrawed $5
 user1: Deposited $50
 user1: Withdrawed $20
+user1: Deposited $15.5
+user1: Withdrawed $14.5

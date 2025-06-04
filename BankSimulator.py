@@ -7,23 +7,6 @@ USER_FILE = "users.txt"
 TRANSACTION_FILE = "transactions.txt"
 LINE = "==================================="
 
-#Function to validate user's age
-def Valid_Age():
-    while True:
-        try:
-            user_age = int(input("Please enter your age: "))
-            if user_age > MAXIMUM_AGE:
-                print("You are too old to use this program.\nGoodbye!")
-                break
-            elif 0 < user_age < MINIMUM_AGE:
-                print("You are too young to use this program.\nGoodbye!")
-                break
-            elif user_age <= 0:
-                print("Enter an integer above 0")
-            else:
-                Login_Selection() #Proceed to login or sign up menu
-        except ValueError:
-            print("Please enter an integer")
 
 #Main menu for login, sign up, or exit
 def Login_Selection():
@@ -33,7 +16,7 @@ def Login_Selection():
             if user_choice == 1:
                 Login() #Proceed to login
             elif user_choice == 2:
-                Sign_Up() #Proceed to sign up
+                Valid_Age() #Procceed to age validation
             elif user_choice == 3:
                 print("Goodbye!")
                 quit() #Exit the program
@@ -60,6 +43,24 @@ def save_users(users):
         for username, password in users.items():
             f.write(f"{username},{password['password']},{password['balance']}\n")
 
+#Function to validate user's age
+def Valid_Age():
+    while True:
+        try:
+            user_age = int(input("Please enter your age: "))
+            if user_age > MAXIMUM_AGE:
+                print("You are too old to create an account.\nGoodbye!")
+                break
+            elif 0 < user_age < MINIMUM_AGE:
+                print("You are too young to create an account.\nGoodbye!")
+                break
+            elif user_age <= 0:
+                print("Enter an integer above 0")
+            else:
+                Sign_Up() #Proceed to Sign up menu
+        except ValueError:
+            print("Please enter an integer")
+
 #Function to handle user sign up
 def Sign_Up():
     users = Load_Users()
@@ -75,16 +76,16 @@ def Sign_Up():
         else:
             break
     while True:
-        user_password = getpass.getpass("Please enter a password, or 'exit' to return to menu: ")
-        lowered_password = user_password.lower()
+        password = getpass.getpass("Please enter a password, or 'exit' to return to menu: ")
+        lowered_password = password.lower()
         if lowered_password == "exit":
             Login_Selection() #Returns the user to login or sign up menu
-        if len(user_password) < 6: #Check password length
+        if len(password) < 6: #Check password length
             print("Password must be at least 6 characters long.")
         else:
             break
     #Save the new user with starting balance of $0.00
-    users[username] = {"password": user_password, "balance": 0.0}
+    users[username] = {"password": password, "balance": 0.0}
     save_users(users)
     print("Account created successfully!\n")
     Login_Selection()
@@ -100,8 +101,8 @@ def Login():
         print("Please enter a valid username")
         username = input("Enter your username: ").strip()
     while True: #Check for password
-        user_password = getpass.getpass("Please enter a password, or 'exit' to return to menu: ")
-        lowered_password = user_password.lower()
+        password = getpass.getpass("Please enter a password, or 'exit' to return to menu: ")
+        lowered_password = password.lower()
         if lowered_password == "exit":
             Login_Selection() #Returns the user to login or sign up menu
         if password == "":
@@ -142,7 +143,7 @@ def Log_Transaction(username, message):
 #Withdraw money from user's balance
 def Withdraw(username, users):
     while True:
-        withdraw_amount = int(input("Please enter how much you would like to withdraw: $"))
+        withdraw_amount = float(input("Please enter how much you would like to withdraw: $"))
         if withdraw_amount <= 0:
             print("Please enter an amount greater than 0")
         else:
@@ -158,7 +159,7 @@ def Withdraw(username, users):
 #Deposit money to user's balance
 def Deposit(username, users):
     while True:
-        deposit_amount = int(input("Please enter how much you would like to deposit: $"))
+        deposit_amount = float(input("Please enter how much you would like to deposit: $"))
         if deposit_amount <= 0:
             print("Please enter an amount greater than 0")
         else:
