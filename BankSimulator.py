@@ -6,7 +6,7 @@ MINIMUM_AGE = 13
 USER_FILE = "users.txt"
 TRANSACTION_FILE = "transactions.txt"
 LINE = "==================================="
-
+MAX_TRIES = 4
 
 #Main menu for login, sign up, or exit
 def Login_Selection():
@@ -100,33 +100,34 @@ def Login():
     while username not in users: #Check if username exists
         print("Please enter a valid username")
         username = input("Enter your username: ").strip()
-    while True: #Check for password
+    password_tries = 1
+    password = getpass.getpass("Please enter a password, or 'exit' to return to menu: ")
+    if password.lower() == "exit":
+        Login_Selection() #Returns the user to login or sign up menu
+    while users[username]["password"] != password:
+        if password_tries >= MAX_TRIES:
+            print("Too many incorrect attempts.")
+            Login_Selection() #Retunrs the user to login or sign up menu
+        print(f"Incorrect password, you have {MAX_TRIES - password_tries} tries left.")
         password = getpass.getpass("Please enter a password, or 'exit' to return to menu: ")
-        lowered_password = password.lower()
-        if lowered_password == "exit":
+        password_tries += 1
+        if password.lower() == "exit":
             Login_Selection() #Returns the user to login or sign up menu
-        if password == "":
-            print("You must enter a password")
-        else:
-            break
-    while users[username]["password"] != password: #Validate password
-        print("Incorrect password.")
-        password = input("Please enter your password: ")
-    print(f"{LINE}\nWelcome {username}!")
-    Banking_Menu(username, users)
+    print(f"Welcome {username}!\n{LINE}")
+    Banking_Menu(username, users) #Proceed to banking menu
 
 #Main banking menu for transactions
 def Banking_Menu(username, users):
     print(f"Your current balance is: ${users[username]['balance']}")
     while True:
         try:
-            banking_choice = int(input(f"1. Withdraw\n2. Deposit\n3. Display Transanctions\n4. Logout\n{LINE}\nPlease enter a choice: "))
+            banking_choice = int(input(f"1. Withdraw\n2. Deposit\n3. Display Transactions\n4. Logout\n{LINE}\nPlease enter a choice: "))
             if banking_choice == 1:
                 Withdraw(username, users)
             elif banking_choice == 2:
                 Deposit(username, users)
             elif banking_choice == 3:
-                Transanction_History(username, users)
+                Transaction_History(username, users)
             elif banking_choice == 4:
                 print("You have logged out of your account")
                 Login_Selection()
@@ -153,8 +154,9 @@ def Withdraw(username, users):
                 users[username]["balance"] -= withdraw_amount
                 print(f"Withdrawal successful!\nYou have withdrawn ${withdraw_amount}\n{LINE}")
                 save_users(users)
-                Log_Transaction(username, f"Withdrawed ${withdraw_amount}")
-                Banking_Menu(username, users) #Returns the user to banking menu
+                Log_Transaction(username, f"Withdrew ${withdraw_amount}")
+                print(f"Your current balance is: ${users[username]['balance']}")
+                break #Returns the user to banking menu
 
 #Deposit money to user's balance
 def Deposit(username, users):
@@ -168,14 +170,14 @@ def Deposit(username, users):
     print(f"Deposit successful!\nYou have deposited ${deposit_amount}\n{LINE}")
     save_users(users)
     Log_Transaction(username, f"Deposited ${deposit_amount}")
-    Banking_Menu(username, users) #Returns the user to banking menu
+    print(f"Your current balance is: ${users[username]['balance']}")
 
 #Show transaction history for all users (optionally could be filtered per user)
-def Transanction_History(username, users):
+def Transaction_History(username, users):
     try:
         with open(TRANSACTION_FILE, "r") as f:
             for line in f:
-                if line.startswith(f"{username}: "):
+                if line.startswith(f"{username}: "): #Only shows transaction for current user
                     print(line)
     except FileNotFoundError:
         print("No transactions found.")
