@@ -44,20 +44,19 @@ def save_users(users):
 #Function to validate user's age
 def Valid_Age():
     while True:
+        user_age = enterbox("Please enter your age: ", "Bank Simulator")
+        if user_age is None:
+            Login_Selection() #Returns the user to login or sign up menu
         try:
-            user_age = int(input("Please enter your age: "))
-            if user_age > MAXIMUM_AGE:
-                print("You are too old to create an account.\nGoodbye!")
-                quit()
-            elif 0 < user_age < MINIMUM_AGE:
-                print("You are too young to create an account.\nGoodbye!")
-                quit()
-            elif user_age <= 0:
-                print("Enter an integer above 0")
+            user_age = int(user_age)
+            if user_age <= 0:
+                msgbox("Please enter an integer above 0")
+            elif user_age > MAXIMUM_AGE or user_age < MINIMUM_AGE:
+                msgbox("Users must be within ages 13 - 18 to create an account")
             else:
-                Sign_Up() #Proceed to Sign up menu
+                Sign_Up() #Proceed to sign up
         except ValueError:
-            print("Please enter an integer")
+            msgbox("Please enter an integer")
 
 #Function to handle user sign up
 def Sign_Up():
