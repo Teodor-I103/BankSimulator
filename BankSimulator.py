@@ -62,29 +62,28 @@ def Valid_Age():
 def Sign_Up():
     users = Load_Users()
     while True:
-        username = input("Please enter a username, or 'exit' to return to menu: ").strip()
-        lowered_username = username.lower()
-        if lowered_username == "exit":
+        username = enterbox("Please enter a username: ", "Bank Simulator")
+        if username is None:
             Login_Selection() #Returns the user to login or sign up menu
-        if username == "":
-            print("Please enter a valid username")
+        elif username == "":
+            msgbox("Please enter a valid username")
         elif username in users:
-            print("Username already exists. Try another.")
+            msgbox("Username already exists. Try another.")
         else:
             break
+    username = username.strip() #Removes any spaces after the username
     while True:
-        password = getpass.getpass("Please enter a password, or 'exit' to return to menu: ")
-        lowered_password = password.lower()
-        if lowered_password == "exit":
+        password = passwordbox("Please enter a password: ", "Bank Simulator")
+        if password is None:
             Login_Selection() #Returns the user to login or sign up menu
-        if len(password) < 6: #Check password length
-            print("Password must be at least 6 characters long.")
+        elif len(password) < 6: #Check password length
+            msgbox("Password must be at least 6 characters long.")
         else:
             break
     #Save the new user with starting balance of $0.00
     users[username] = {"password": password, "balance": 0.0}
     save_users(users)
-    print("Account created successfully!\n")
+    msgbox("Account created successfully!")
     Login_Selection()
 
 #Handles logging in an existing user
