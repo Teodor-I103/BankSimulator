@@ -1,4 +1,5 @@
 import getpass
+from easygui import *
 
 #Constants for allowed age range and filenames
 MAXIMUM_AGE = 18
@@ -11,19 +12,16 @@ MAX_TRIES = 4
 #Main menu for login, sign up, or exit
 def Login_Selection():
     while True:
-        try:
-            user_choice = int(input(f"{LINE}\n1. Login\n2. Sign Up\n3. Exit\n{LINE}\nEnter an option: "))
-            if user_choice == 1:
-                Login() #Proceed to login
-            elif user_choice == 2:
-                Valid_Age() #Procceed to age validation
-            elif user_choice == 3:
-                print("Goodbye!")
-                quit() #Exit the program
-            else:
-                print("Please enter 1, 2 or 3")
-        except ValueError:
-            print("Please enter a number")
+        user_choice = buttonbox("Welcome to my bank simulator!\nChoose an option:", "Bank Menu", ["Login", "Sign Up", "Exit"])
+        if user_choice == "Login":
+            Login()
+        elif user_choice == "Sign Up":
+            Valid_Age()
+        elif user_choice == "Exit":
+            exit_confirmation = buttonbox("Are you sure you wish to exit?", "Bank Simulator", ["Yes", "No"])
+            if exit_confirmation == "Yes":
+                msgbox("Goodbye!")
+                quit()
 
 #Load all users from the file into a dictionary
 def Load_Users():

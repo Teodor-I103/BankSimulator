@@ -1,0 +1,5 @@
+user1: Deposited $50.0
+user1: Deposited $25.0
+user1: Withdrew $20.0
+User1: Deposited $50.0
+User1: Withdrew $25.0
