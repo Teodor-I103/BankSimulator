@@ -179,15 +179,16 @@ def Deposit(username, users):
 
 #Show transaction history for all users (optionally could be filtered per user)
 def Transaction_History(username, users):
+    transanction_message = []
     try:
         with open(TRANSACTION_FILE, "r") as f:
             for line in f:
                 if line.startswith(f"{username}: "): #Only shows transaction for current user
-                    print(line)
+                    transanction_message.append(line)
     except FileNotFoundError:
         print("No transactions found.")
-    print(LINE)
-    Banking_Menu(username, users) #Returns the user to banking menu
+    transanction_message.append(f"Current Balance: ${users[username]['balance']:.2f}")
+    textbox("Transaction History", "Bank Simulator", transanction_message)
 
 #Program starts here
 Login_Selection()
