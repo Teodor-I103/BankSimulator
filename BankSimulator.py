@@ -6,8 +6,8 @@ MAXIMUM_AGE = 18
 MINIMUM_AGE = 13
 USER_FILE = "users.txt"
 TRANSACTION_FILE = "transactions.txt"
-LINE = "==================================="
 MAX_TRIES = 4
+LINE = "==================================="
 
 #Main menu for login, sign up, or exit
 def Login_Selection():
@@ -89,27 +89,30 @@ def Sign_Up():
 #Handles logging in an existing user
 def Login():
     users = Load_Users()
-    username = input("Please enter a username, or 'exit' to return to menu: ").strip()
-    lowered_username = username.lower()
-    if lowered_username == "exit":
+    username = enterbox("Please enter a username: ", "Bank Simulator")
+    if username is None:
         Login_Selection() #Returns the user to login or sign up menu
+    username = username.strip() #Removes any spaces after the username
     while username not in users: #Check if username exists
-        print("Please enter a valid username")
-        username = input("Enter your username: ").strip()
+        msgbox("Please enter a valid username")
+        username = enterbox("Enter your username: ")
+        if username is None:
+            Login_Selection() #Returns the user to login or sign up menu
+        username = username.strip() #Removes any spaces after the username
     password_tries = 1
-    password = getpass.getpass("Please enter a password, or 'exit' to return to menu: ")
-    if password.lower() == "exit":
+    password = passwordbox("Please enter a password: ", "Bank Simulator")
+    if password is None:
         Login_Selection() #Returns the user to login or sign up menu
     while users[username]["password"] != password:
         if password_tries >= MAX_TRIES:
             print("Too many incorrect attempts.")
             Login_Selection() #Retunrs the user to login or sign up menu
         print(f"Incorrect password, you have {MAX_TRIES - password_tries} tries left.")
-        password = getpass.getpass("Please enter a password, or 'exit' to return to menu: ")
+        password = passwordbox("Please enter a password: ", "Bank Simulator")
         password_tries += 1
-        if password.lower() == "exit":
+        if password is None:
             Login_Selection() #Returns the user to login or sign up menu
-    print(f"Welcome {username}!\n{LINE}")
+    msgbox(f"Welcome {username}!")
     Banking_Menu(username, users) #Proceed to banking menu
 
 #Main banking menu for transactions
