@@ -7,7 +7,7 @@ MINIMUM_AGE = 13
 USER_FILE = "users.txt"
 TRANSACTION_FILE = "transactions.txt"
 MAX_TRIES = 4
-LINE = "==================================="
+BANKING_CHOICES = ["Withdraw", "Deposit", "Display Transactions", "Logout"]
 
 #Main menu for login, sign up, or exit
 def Login_Selection():
@@ -119,21 +119,18 @@ def Login():
 def Banking_Menu(username, users):
     print(f"Your current balance is: ${users[username]['balance']}")
     while True:
-        try:
-            banking_choice = int(input(f"1. Withdraw\n2. Deposit\n3. Display Transactions\n4. Logout\n{LINE}\nPlease enter a choice: "))
-            if banking_choice == 1:
-                Withdraw(username, users)
-            elif banking_choice == 2:
-                Deposit(username, users)
-            elif banking_choice == 3:
-                Transaction_History(username, users)
-            elif banking_choice == 4:
-                print("You have logged out of your account")
+        banking_choice = buttonbox(f"Your current balance is: ${users[username]['balance']:.2f}", "Banking Menu", BANKING_CHOICES)
+        if banking_choice == "Withdraw":
+            Withdraw(username, users)
+        elif banking_choice == "Deposit":
+            Deposit(username, users)
+        elif banking_choice == "Display Transactions":
+            Transaction_History(username, users)
+        elif banking_choice == "Logout":
+            exit_confirmation = buttonbox("Are you sure you wish to logout", "Bank Simulator", ["Yes", "No"])
+            if exit_confirmation == "Yes":
+                msgbox("You have logged out of your account")
                 Login_Selection()
-            else:
-                print("Enter 1, 2, 3, or 4")
-        except ValueError:
-            print("Please enter a number")
 
 #Append a transaction to the transaction log
 def Log_Transaction(username, message):
