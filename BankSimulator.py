@@ -1,4 +1,3 @@
-import getpass
 from easygui import *
 
 #Constants for allowed age range and filenames
@@ -69,6 +68,8 @@ def Sign_Up():
             msgbox("Please enter a valid username")
         elif username in users:
             msgbox("Username already exists. Try another.")
+        elif "," in username:
+            msgbox("Username cannot contain a comma.")
         else:
             break
     username = username.strip() #Removes any spaces after the username
@@ -78,6 +79,8 @@ def Sign_Up():
             Login_Selection() #Returns the user to login or sign up menu
         elif len(password) < 6: #Check password length
             msgbox("Password must be at least 6 characters long.")
+        elif "," in password:
+            msgbox("Password cannot contain a comma.")
         else:
             break
     #Save the new user with starting balance of $0.00
