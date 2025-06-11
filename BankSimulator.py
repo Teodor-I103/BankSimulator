@@ -82,7 +82,13 @@ def Sign_Up():
         elif "," in password:
             msgbox("Password cannot contain a comma.")
         else:
-            break
+            confrim_password = passwordbox("Please confrim your password: ", "Bank Simulator")
+            if confrim_password is None:
+                Login_Selection() #Returns the user to login or sign up menu
+            elif password == confrim_password:
+                break
+            else:
+                msgbox("Passwords do not match")
     #Save the new user with starting balance of $0.00
     users[username] = {"password": password, "balance": 0.0}
     save_users(users)
