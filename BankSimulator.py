@@ -161,16 +161,21 @@ def Withdraw(username, users):
 #Deposit money to user's balance
 def Deposit(username, users):
     while True:
-        deposit_amount = float(input("Please enter how much you would like to deposit: $"))
-        if deposit_amount <= 0:
-            print("Please enter an amount greater than 0")
-        else:
-            break
-    users[username]["balance"] += deposit_amount
-    print(f"Deposit successful!\nYou have deposited ${deposit_amount}\n{LINE}")
-    save_users(users)
-    Log_Transaction(username, f"Deposited ${deposit_amount}")
-    print(f"Your current balance is: ${users[username]['balance']}")
+        amount = enterbox("Please enter how much you would like to deposit:")
+        if amount is None: #Check if the user pressed cancel
+            return
+        try:
+            amount = float(amount)
+            if amount <= 0: #Check if the amount is positive
+                msgbox("Please enter an amount greater than 0")
+            else:
+                users[username]["balance"] += amount
+                save_users(users)
+                Log_Transaction(username, f"Deposited ${amount}")
+                msgbox(f"Deposit successful!\nYou have deposited ${amount}")
+                return
+        except ValueError:
+            msgbox("Please enter a number")
 
 #Show transaction history for all users (optionally could be filtered per user)
 def Transaction_History(username, users):
