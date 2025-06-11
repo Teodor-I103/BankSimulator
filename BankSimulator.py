@@ -121,11 +121,11 @@ def Banking_Menu(username, users):
     while True:
         banking_choice = buttonbox(f"Your current balance is: ${users[username]['balance']:.2f}", "Banking Menu", BANKING_CHOICES)
         if banking_choice == "Withdraw":
-            Withdraw(username, users)
+            Withdraw(username, users) #Proceeds to withdraw function
         elif banking_choice == "Deposit":
-            Deposit(username, users)
+            Deposit(username, users) #Proceeds to deposit function
         elif banking_choice == "Display Transactions":
-            Transaction_History(username, users)
+            Transaction_History(username, users) #Proceeds to transaction history function
         elif banking_choice == "Logout":
             exit_confirmation = buttonbox("Are you sure you wish to logout", "Bank Simulator", ["Yes", "No"])
             if exit_confirmation == "Yes":
@@ -140,19 +140,23 @@ def Log_Transaction(username, message):
 #Withdraw money from user's balance
 def Withdraw(username, users):
     while True:
-        withdraw_amount = float(input("Please enter how much you would like to withdraw: $"))
-        if withdraw_amount <= 0:
-            print("Please enter an amount greater than 0")
-        else:
-            if withdraw_amount > users[username]["balance"]: #Check if withdrawal amount exceeds balance
-                print("Not enough balance available.")
-            else: #Proceed with withdrawal
-                users[username]["balance"] -= withdraw_amount
-                print(f"Withdrawal successful!\nYou have withdrawn ${withdraw_amount}\n{LINE}")
+        amount = enterbox(f"Your current balance is: ${users[username]['balance']:.2f}\nPlease enter how much you would like to withdraw:")
+        if amount is None: #Check if the user pressed cancel
+            break
+        try:
+            amount = float(amount)
+            if amount <= 0: #Check if the amount is positive
+                msgbox("Please enter an amount greater than 0")
+            elif amount > users[username]["balance"]: #Check if the amount is greater than the balance
+                msgbox("Not enough balance available.")
+            else:
+                users[username]["balance"] -= amount
                 save_users(users)
-                Log_Transaction(username, f"Withdrew ${withdraw_amount}")
-                print(f"Your current balance is: ${users[username]['balance']}")
-                break #Returns the user to banking menu
+                Log_Transaction(username, f"Withdrew ${amount}")
+                msgbox(f"Withdrawal successful!\nYou have withdrawn ${amount}")
+                break
+        except ValueError:
+            msgbox("Please enter a number")
 
 #Deposit money to user's balance
 def Deposit(username, users):
