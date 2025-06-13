@@ -21,6 +21,8 @@ def Login_Selection():
             if exit_confirmation == "Yes":
                 msgbox("Goodbye!")
                 quit()
+        elif user_choice is None: #If user exits the menu from top right corner
+            quit()
 
 #Load all users from the file into a dictionary
 def Load_Users():
@@ -126,7 +128,6 @@ def Login():
 
 #Main banking menu for transactions
 def Banking_Menu(username, users):
-    print(f"Your current balance is: ${users[username]['balance']}")
     while True:
         banking_choice = buttonbox(f"Your current balance is: ${users[username]['balance']:.2f}", "Banking Menu", BANKING_CHOICES)
         if banking_choice == "Withdraw":
@@ -161,7 +162,7 @@ def Withdraw(username, users):
             else:
                 users[username]["balance"] -= amount
                 save_users(users)
-                Log_Transaction(username, f"Withdrew ${amount}")
+                Log_Transaction(username, f"Withdrew ${amount:.2f}")
                 msgbox(f"Withdrawal successful!\nYou have withdrawn ${amount}")
                 break
         except ValueError:
@@ -177,11 +178,13 @@ def Deposit(username, users):
             amount = float(amount)
             if amount <= 0: #Check if the amount is positive
                 msgbox("Please enter an amount greater than 0")
+            elif amount > 10000:
+                msgbox("Cannot deposit more than $10,000 at a time.")
             else:
                 users[username]["balance"] += amount
                 save_users(users)
-                Log_Transaction(username, f"Deposited ${amount}")
-                msgbox(f"Deposit successful!\nYou have deposited ${amount}")
+                Log_Transaction(username, f"Deposited ${amount:.2f}")
+                msgbox(f"Deposit successful!\nYou have deposited ${amount:.2f}")
                 return
         except ValueError:
             msgbox("Please enter a number")
