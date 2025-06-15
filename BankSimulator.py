@@ -84,10 +84,10 @@ def Sign_Up():
         elif "," in password:
             msgbox("Password cannot contain a comma.")
         else:
-            confrim_password = passwordbox("Please confrim your password: ", "Bank Simulator")
-            if confrim_password is None:
+            confirm_password = passwordbox("Please confirm your password: ", "Bank Simulator")
+            if confirm_password is None:
                 Login_Selection() #Returns the user to login or sign up menu
-            elif password == confrim_password:
+            elif password == confirm_password:
                 break
             else:
                 msgbox("Passwords do not match")
@@ -116,10 +116,10 @@ def Login():
         Login_Selection() #Returns the user to login or sign up menu
     while users[username]["password"] != password:
         if password_tries >= MAX_TRIES:
-            print("Too many incorrect attempts.")
+            msgbox("Too many incorrect attempts.")
             Login_Selection() #Retunrs the user to login or sign up menu
-        print(f"Incorrect password, you have {MAX_TRIES - password_tries} tries left.")
-        password = passwordbox("Please enter a password: ", "Bank Simulator")
+            break
+        password = passwordbox(f"Incorrect password, you have {MAX_TRIES - password_tries} tries left.\nPlease enter a password: ", "Bank Simulator")
         password_tries += 1
         if password is None:
             Login_Selection() #Returns the user to login or sign up menu
@@ -141,6 +141,7 @@ def Banking_Menu(username, users):
             if exit_confirmation == "Yes":
                 msgbox("You have logged out of your account")
                 Login_Selection()
+                break
 
 #Append a transaction to the transaction log
 def Log_Transaction(username, message):
@@ -163,7 +164,7 @@ def Withdraw(username, users):
                 users[username]["balance"] -= amount
                 save_users(users)
                 Log_Transaction(username, f"Withdrew ${amount:.2f}")
-                msgbox(f"Withdrawal successful!\nYou have withdrawn ${amount}")
+                msgbox(f"Withdrawal successful!\nYou have withdrawn ${amount:.2f}")
                 break
         except ValueError:
             msgbox("Please enter a number")
@@ -191,16 +192,16 @@ def Deposit(username, users):
 
 #Show transaction history for all users (optionally could be filtered per user)
 def Transaction_History(username, users):
-    transanction_message = []
+    transaction_message = []
     try:
         with open(TRANSACTION_FILE, "r") as f:
             for line in f:
                 if line.startswith(f"{username}: "): #Only shows transaction for current user
-                    transanction_message.append(line)
+                    transaction_message.append(line)
     except FileNotFoundError:
-        print("No transactions found.")
-    transanction_message.append(f"Current Balance: ${users[username]['balance']:.2f}")
-    textbox("Transaction History", "Bank Simulator", transanction_message)
+        msgbox("No transactions found.")
+    transaction_message.append(f"Current Balance: ${users[username]['balance']:.2f}")
+    textbox("Transaction History", "Bank Simulator", transaction_message)
 
 #Program starts here
 Login_Selection()
